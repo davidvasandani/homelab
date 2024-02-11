@@ -1,0 +1,111 @@
+version: "3.9"
+
+services:
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    command: "--config.file=/tmp/prometheus.yml --web.listen-address '0.0.0.0:9090'"
+    ports:
+      - 9090:9090
+    networks:
+      - internal
+    volumes:
+      - ./config.yml:/tmp/prometheus.yml
+    depends_on:
+      statsd-exporter: { condition: service_started }
+      cadvisor: { condition: service_started }
+    labels:
+      caddy: prom.dev.vasandani.me
+      caddy.handle_path: /*
+      caddy.handle_path.reverse_proxy: "{{ upstreams 9090 }}"
+      caddy.tls: internal
+      logging: promtail
+      logging_jobname: containerlogs
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
+        fluentd-async-connect: 'true'
+        tag: service.prometheus
+
+  statsd-exporter:
+    container_name: statsd-exporter
+    image: prom/statsd-exporter
+    command: '--statsd.mapping-config=/tmp/statsd_mapping.yml'
+    ports:
+      - 9102:9102
+      - 9125:9125/udp
+    networks:
+      - internal
+    volumes:
+      - ./configs/statsd_mapping.yml:/tmp/statsd_mapping.yml
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
+        fluentd-async-connect: 'true'
+        tag: service.statsd-exporter
+    labels:
+      logging: promtail
+      logging_jobname: containerlogs
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    networks:
+      - internal
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
+        fluentd-async-connect: 'true'
+        tag: service.node-exporter
+    labels:
+      logging: promtail
+      logging_jobname: containerlogs
+
+  elasticsearch-exporter:
+    image: quay.io/prometheuscommunity/elasticsearch-exporter:latest
+    container_name: elasticsearch-exporter
+    command:
+      - '--es.uri=http://admin:changeme@elasticsearch:9200'
+    restart: unless-stopped
+    networks:
+      - internal
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
+        fluentd-async-connect: 'true'
+        tag: service.elasticsearch-exporter
+    labels:
+      logging: promtail
+      logging_jobname: containerlogs
+
+  postgres-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter
+    container_name: postgres-exporter
+    environment:
+      DATA_SOURCE_NAME: 'postgresql://admin:changeme@postgres:5432/postgres?sslmode=disable'
+    restart: unless-stopped
+    networks:
+      - internal
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
+        fluentd-async-connect: 'true'
+        tag: service.postgres-exporter
+    labels:
+      logging: promtail
+      logging_jobname: containerlogs

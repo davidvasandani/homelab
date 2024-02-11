@@ -1,0 +1,5 @@
+version: '3.9'
+
+include:
+  - path: ./shared/elasticsearch/compose.yml
+    project_directory: .

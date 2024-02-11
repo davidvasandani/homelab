@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  fluent-bit:
+    image: grafana/fluent-bit-plugin-loki:latest
+    container_name: fluent-bit
+    environment:
+      - LOKI_URL=http://loki:3100/loki/api/v1/push
+    volumes:
+      - ./config.conf:/fluent-bit/etc/fluent-bit.conf
+    ports:
+      - 24224:24224
+      - 24224:24224/udp
+    networks:
+      - internal
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
+        fluentd-async-connect: "true"
+        tag: service.fluent-bit
+

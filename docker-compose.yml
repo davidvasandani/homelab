@@ -1,0 +1,15 @@
+version: '3.9'
+
+include:
+  - path: shared/compose.yml
+    project_directory: .
+  - path: monitoring/compose.yml
+    project_directory: .
+
+networks:
+  internal:
+    name: internal
+    # external: true
+  external:
+    name: external
+    # external: true

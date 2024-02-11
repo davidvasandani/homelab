@@ -1,0 +1,9 @@
+version: '3.9'
+
+include:
+  - path: ./monitoring/grafana/compose.yml
+  - path: ./monitoring/loki/compose.yml
+  - path: ./monitoring/fluentbit/compose.yml
+  - path: ./monitoring/promtail/compose.yml
+  - path: ./monitoring/prometheus/compose.yml
+  - path: ./monitoring/cadvisor/compose.yml

@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  grafana:
+    image: grafana/grafana-oss:7.4.2
+    container_name: grafana
+    restart: unless-stopped
+    environment:
+      # https://grafana.com/grafana/plugins/
+      GF_INSTALL_PLUGINS: grafana-clock-panel,grafana-simple-json-datasource
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: changeme
+    # https://github.com/grafana/grafana/pull/55980
+    # command:
+    #   [
+    #     "/bin/sh",
+    #     "-c",
+    #     "grafana-cli admin reset-admin-password $GF_SECURITY_ADMIN_PASSWORD && /run.sh",
+    #   ]
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./config.yml:/etc/grafana/provisioning/datasources/datasource.yml
+    networks:
+      - internal
+      - external
+    depends_on:
+      loki: { condition: service_started }
+      elasticsearch: { condition: service_healthy }
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
+        fluentd-async-connect: "true"
+        tag: service.grafana
+    labels:
+      # TODO: replace domains with ${MASTODON_DOMAIN}
+      caddy: grafana.dev.vasandani.me
+      caddy.handle_path: /*
+      caddy.handle_path.reverse_proxy: '{{ upstreams 3000 }}'
+      caddy.tls: internal
+      logging: promtail
+      logging_jobname: containerlogs
+
+volumes:
+  grafana_data:

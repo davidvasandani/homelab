@@ -1,0 +1,17 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - docker compose up -d
+    silent: true
+  ps:
+    cmds:
+      - docker compose ps
+    silent: true
+  logs:
+    cmd: docker compose logs --since 10m --follow {{.CLI_ARGS}}
+    # silent: true
+    interactive: true
