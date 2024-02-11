@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  php-test:
+    image: php:fpm-alpine
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      - internal
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
+        fluentd-async-connect: "true"
+        tag: service.php-test
+    labels:
+      logging: promtail
+      logging_jobname: containerlogs
+      caddy: phpinfo.dev.vasandani.me
+      caddy.tls.dns: cloudflare ${CLOUDFLARE_API_TOKEN}
+      caddy.root: "* /php-fpm-root/php-test"
+      caddy.php_fastcgi: "{{ upstreams 9000 }}"
+      caddy.php_fastcgi.root: /var/www/html
+      caddy.file_server: ""
+      caddy.log: ""

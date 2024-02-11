@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  flog-json:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flog-app
+    restart: always
+    command: /bin/flog -s1 -d1 -l -f json
+    networks:
+      - internal
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
+        fluentd-async-connect: "true"
+        tag: service.flog-json
+    labels:
+      logging: promtail
+      logging_jobname: containerlogs

@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   fluent-bit:
-    image: grafana/fluent-bit-plugin-loki:latest
+    image: grafana/fluent-bit-plugin-loki:2.9.1-arm64
     container_name: fluent-bit
     environment:
       - LOKI_URL=http://loki:3100/loki/api/v1/push

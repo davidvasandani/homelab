@@ -1,6 +1,8 @@
 version: '3.9'
 
 include:
+  - path: tests/compose.yml
+    project_directory: .
   - path: shared/compose.yml
     project_directory: .
   - path: monitoring/compose.yml
@@ -13,3 +15,6 @@ networks:
   external:
     name: external
     # external: true
+
+# secrets:
+#   - .env

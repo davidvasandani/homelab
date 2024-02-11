@@ -1,0 +1,8 @@
+version: '3.9'
+
+services:
+  populator:
+    image: circonus/gen-statsd:latest
+    container_name: populator
+    environment:
+      STATSD_HOST: statsd-exporter:9125

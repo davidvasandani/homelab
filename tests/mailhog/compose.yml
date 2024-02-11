@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  mailhog:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mailhog
+    restart: always
+    ports:
+      - 2525:1025
+      - 8025:8025
+    networks:
+      - external
+      - internal
+    labels:
+      caddy: dev.vasandani.me
+      caddy.handle_path: /mail*
+      caddy.handle_path.reverse_proxy: "{{ upstreams 8025 }}"
+      caddy.tls: internal

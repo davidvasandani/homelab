@@ -1,5 +1,10 @@
 {
   "cSpell.words": [
-    "datasources"
+    "datasources",
+    "dbeaver",
+    "jdbc",
+    "thog",
+    "trufflehog",
+    "workdir"
   ]
 }

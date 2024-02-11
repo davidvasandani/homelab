@@ -9,9 +9,26 @@ tasks:
     silent: true
   ps:
     cmds:
-      - docker compose ps
+      - docker compose ps -a
     silent: true
   logs:
     cmd: docker compose logs --since 10m --follow {{.CLI_ARGS}}
     # silent: true
     interactive: true
+
+  brew:
+    cmds:
+      - brew bundle install --file=Brewfile
+
+  git-secrets:
+    cmds:
+      - gh repo clone awslabs/git-secrets
+      - cd git-secrets
+      - sudo make install
+      - rm -rf git-secrets
+      - git secrets --install --force
+      - git secrets --register-aws
+
+  deps:
+    cmds:
+      - task brew

@@ -1,0 +1,57 @@
+version: "3.9"
+
+include:
+  - path: ./tests/cloudbeaver/compose.yml
+  - path: ./tests/flog/compose.yml
+  - path: ./tests/hello/compose.yml
+  - path: ./tests/mailhog/compose.yml
+  - path: ./tests/oauth/compose.yml
+  - path: ./tests/php-fpm/compose.yml
+  - path: ./tests/populator/compose.yml
+
+# services:
+  # ngrok:
+  #   platform: linux/arm64
+  #   build:
+  #     context: docker
+  #     dockerfile: Dockerfile.ngrok
+  #   container_name: ngrok
+
+  # TODO: add statsd debug container
+  # STATSD_ADDR=host.docker.internal:8125
+  # docker run -p 8125:8125/udp dasch/statsd-debug
+
+  # tcpdump:
+  #   image: nicolaka/netshoot
+  #   container_name: tcpdump
+  #   depends_on:
+  #     - mastodon
+  #   command: tcpdump -i eth0 -w /data/mastodon.pcap
+  #   network_mode: service:mastodon
+  #   networks:
+  #     - internal
+  #   volumes:
+  #     - $PWD/data:/data
+  #   logging:
+  #     driver: fluentd
+  #     options:
+  #       fluentd-address: 127.0.0.1:24224
+  #       tag: service.tcpdump
+  #   labels:
+  #     logging: 'promtail'
+  #     logging_jobname: 'containerlogs'
+
+  # whoami:
+  #   container_name: whoiam
+  #   image: jwilder/whoami:latest
+  #   hostname: TheDocker
+  #   restart: unless-stopped
+  #   labels:
+  #     caddy: http://whoami.elseajay.xyz #### needs for caddy to redirect traffic
+  #     # caddy.servers.protocols: "experimental_http3" #### For HTTP/3
+  #     # caddy.tls.ca: "https://acme.zerossl.com/v2/DV90" ### Only if you will prefer ZeroSSL. Default it is Let's Encypt.
+  #     caddy.reverse_proxy: "{{upstreams 8000}}" #### needs to tell caddy which port number should send traffic
+  #     # caddy.reverse_proxy.header_up: Host whoami.elseajay.xyz
+  #     # caddy.tls.protocols: "tls1.3" #### This is optional. Default it is tls1.2
+  #     # caddy.tls.ca: "https://acme-staging-v02.api.letsencrypt.org/directory" # Needs only for testing purpose. Remove this line after you finished your tests.
+  #     # caddy.tls.dns: "cloudflare ${CLOUDFLARE_API_TOKEN}"
