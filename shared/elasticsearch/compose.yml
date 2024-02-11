@@ -4,7 +4,7 @@ services:
   elasticsearch:
     container_name: elasticsearch
     restart: always
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.5.2-arm64
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.1-arm64
     environment:
       - "ELASTIC_USERNAME=admin"
       - "ELASTIC_PASSWORD=changeme"
@@ -15,7 +15,7 @@ services:
       - "xpack.graph.enabled=false"
       - "xpack.ml.enabled=false"
       - "bootstrap.memory_lock=true"
-      - "cluster.name=es-mastodon"
+      - "cluster.name=es-homelab"
       - "discovery.type=single-node"
       - "thread_pool.write.queue_size=1000"
     networks:
@@ -40,6 +40,24 @@ services:
         fluentd-address: 127.0.0.1:24224
         fluentd-async-connect: "true"
         tag: service.elasticsearch
+    labels:
+      logging: promtail
+      logging_jobname: containerlogs
+
+  elasticsearch-exporter:
+    image: quay.io/prometheuscommunity/elasticsearch-exporter:latest
+    container_name: elasticsearch-exporter
+    command:
+      - '--es.uri=http://admin:changeme@elasticsearch:9200'
+    restart: unless-stopped
+    networks:
+      - internal
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
+        fluentd-async-connect: 'true'
+        tag: service.elasticsearch-exporter
     labels:
       logging: promtail
       logging_jobname: containerlogs

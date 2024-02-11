@@ -38,7 +38,7 @@ services:
     networks:
       - internal
     volumes:
-      - ./configs/statsd_mapping.yml:/tmp/statsd_mapping.yml
+      - ./statsd_mapping.yml:/tmp/statsd_mapping.yml
     logging:
       driver: fluentd
       options:
@@ -70,24 +70,6 @@ services:
         fluentd-address: 127.0.0.1:24224
         fluentd-async-connect: 'true'
         tag: service.node-exporter
-    labels:
-      logging: promtail
-      logging_jobname: containerlogs
-
-  elasticsearch-exporter:
-    image: quay.io/prometheuscommunity/elasticsearch-exporter:latest
-    container_name: elasticsearch-exporter
-    command:
-      - '--es.uri=http://admin:changeme@elasticsearch:9200'
-    restart: unless-stopped
-    networks:
-      - internal
-    logging:
-      driver: fluentd
-      options:
-        fluentd-address: 127.0.0.1:24224
-        fluentd-async-connect: 'true'
-        tag: service.elasticsearch-exporter
     labels:
       logging: promtail
       logging_jobname: containerlogs

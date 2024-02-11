@@ -1,0 +1,20 @@
+{
+	debug
+}
+
+:2019 {
+	respond "Hello, world!"
+}
+
+:2020 {
+	reverse_proxy localhost:2019 {
+		header_up Host localhost:2019
+	}
+}
+
+dev.vasandan.me {
+	respond "Hello, world!"
+	tls {
+		dns cloudflare xm3TG4Z4eIf8FeD3m2zS_0Yi9ObTCBPDyaPBBaU4
+	}
+}

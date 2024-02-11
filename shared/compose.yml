@@ -1,5 +1,5 @@
 version: '3.9'
 
 include:
+  - path: ./shared/caddy/compose.yml
   - path: ./shared/elasticsearch/compose.yml
-    project_directory: .
