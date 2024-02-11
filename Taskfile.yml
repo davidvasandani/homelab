@@ -5,7 +5,7 @@ version: '3'
 tasks:
   default:
     cmds:
-      - docker compose up -d
+      - docker compose up -d --remove-orphans
     silent: true
   ps:
     cmds:

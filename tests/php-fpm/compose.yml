@@ -1,10 +1,13 @@
 version: '3.9'
 
 services:
-  php-test:
+  php-fpm:
     image: php:fpm-alpine
+    container_name: php-fpm
     volumes:
       - ./src:/var/www/html
+    ports:
+        - 9000:9000
     networks:
       - internal
     logging:
@@ -12,12 +15,12 @@ services:
       options:
         fluentd-address: 127.0.0.1:24224
         fluentd-async-connect: "true"
-        tag: service.php-test
+        tag: service.php-fpm
     labels:
       logging: promtail
       logging_jobname: containerlogs
       caddy: phpinfo.dev.vasandani.me
-      caddy.tls.dns: cloudflare ${CLOUDFLARE_API_TOKEN}
+      caddy.tls: internal
       caddy.root: "* /php-fpm-root/php-test"
       caddy.php_fastcgi: "{{ upstreams 9000 }}"
       caddy.php_fastcgi.root: /var/www/html

@@ -26,7 +26,7 @@ services:
       - ./:/data/caddy/files
       - /var/run/docker.sock:/var/run/docker.sock
       - caddy_data:/data
-      # - ./docker/php:/php-fpm-root/php-test
+      - ../../tests/php-fpm/src/:/php-fpm-root/php-test
     logging:
       driver: fluentd
       options:

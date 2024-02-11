@@ -3,6 +3,9 @@
     "datasources",
     "dbeaver",
     "jdbc",
+    "jobname",
+    "logstream",
+    "promtail",
     "thog",
     "trufflehog",
     "workdir"

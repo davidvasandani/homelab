@@ -1,13 +1,13 @@
 version: '3.9'
 
 services:
-  hello:
-    image: mendhak/http-https-echo:31
-    container_name: hello
+  whoami:
+    image: jwilder/whoami:latest
+    container_name: whoami
     environment: 
-        - HTTP_PORT=8888
+        - HTTP_PORT=8000
     ports:
-        - 8888:8888
+        - 8000:8000
     networks:
       - internal
     logging:
@@ -15,10 +15,10 @@ services:
       options:
         fluentd-address: 127.0.0.1:24224
         fluentd-async-connect: "true"
-        tag: service.hello
+        tag: service.whoami
     labels:
-      caddy: hello.dev.vasandani.me
+      caddy: whoami.dev.vasandani.me
       caddy.tls: internal
       # caddy.tls.dns: cloudflare ${CLOUDFLARE_API_TOKEN}
-      caddy.reverse_proxy: "{{ upstreams 8888 }}"
+      caddy.reverse_proxy: "{{ upstreams 8000 }}"
 
