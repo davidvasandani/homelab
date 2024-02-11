@@ -19,6 +19,5 @@ services:
     labels:
       caddy: whoami.dev.vasandani.me
       caddy.tls: internal
-      # caddy.tls.dns: cloudflare ${CLOUDFLARE_API_TOKEN}
       caddy.reverse_proxy: "{{ upstreams 8000 }}"
 

@@ -12,9 +12,6 @@
 	}
 }
 
-dev.vasandan.me {
+dev.vasandani.me {
 	respond "Hello, world!"
-	tls {
-		dns cloudflare xm3TG4Z4eIf8FeD3m2zS_0Yi9ObTCBPDyaPBBaU4
-	}
 }

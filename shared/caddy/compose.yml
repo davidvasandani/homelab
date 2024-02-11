@@ -20,7 +20,6 @@ services:
       CADDY_INGRESS_NETWORKS: internal
       CADDY_DOCKER_NO_SCOPE: true
       CADDY_DOCKER_CADDYFILE_PATH: /data/caddy/files/Caddyfile
-      CLOUDFLARE_EMAIL: david@vasandani.me
     volumes:
       - ./certs:/data/caddy/pki/authorities/local/
       - ./:/data/caddy/files
