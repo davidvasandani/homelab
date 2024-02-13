@@ -1,0 +1,18 @@
+services:
+  postgres-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter
+    container_name: postgres-exporter
+    environment:
+      DATA_SOURCE_NAME: 'postgresql://admin:changeme@postgres:5432/postgres?sslmode=disable'
+    restart: unless-stopped
+    networks:
+      - internal
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
+        fluentd-async-connect: 'true'
+        tag: service.postgres-exporter
+    labels:
+      logging: promtail
+      logging_jobname: containerlogs

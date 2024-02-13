@@ -1,0 +1,22 @@
+services:
+  statsd-exporter:
+    container_name: statsd-exporter
+    image: prom/statsd-exporter
+    command: '--statsd.mapping-config=/tmp/statsd_mapping.yml'
+    ports:
+      - 9102:9102
+      - 9125:9125/tcp
+      - 9125:9125/udp
+    networks:
+      - internal
+    volumes:
+      - ./statsd_mapping.yml:/tmp/statsd_mapping.yml
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
+        fluentd-async-connect: 'true'
+        tag: service.statsd-exporter
+    labels:
+      logging: promtail
+      logging_jobname: containerlogs

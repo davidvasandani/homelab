@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  statsd:
+    image: dasch/statsd-debug
+    container_name: statsd
+    environment: 
+        - STATSD_ADDR=host.docker.internal:8125
+    ports:
+        - 8125:8125/udp
+    networks:
+      - internal
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
+        fluentd-async-connect: "true"
+        tag: service.statsd

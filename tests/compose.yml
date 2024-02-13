@@ -7,8 +7,9 @@ include:
   - path: ./tests/mailhog/compose.yml
   - path: ./tests/oauth/compose.yml
   - path: ./tests/php-fpm/compose.yml
-  - path: ./tests/populator/compose.yml
+  - path: ./tests/gen-statsd/compose.yml
   - path: ./tests/whoami/compose.yml
+  - path: ./tests/statsd/compose.yml
 
 # services:
   # ngrok:
@@ -17,10 +18,6 @@ include:
   #     context: docker
   #     dockerfile: Dockerfile.ngrok
   #   container_name: ngrok
-
-  # TODO: add statsd debug container
-  # STATSD_ADDR=host.docker.internal:8125
-  # docker run -p 8125:8125/udp dasch/statsd-debug
 
   # tcpdump:
   #   image: nicolaka/netshoot
